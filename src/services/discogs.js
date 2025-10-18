@@ -23,7 +23,8 @@ const getUser = async (userName) => {
 const getRequestToken = async () => {
   const requestData = {
     url: `${config.baseUrl}/oauth/request_token`,
-    method: 'GET'
+    method: 'GET',
+    data: { oauth_callback: `https://${config.chromeRuntimeId}.chromiumapp.org/` }
   };
 
   const headers = oauth.toHeader(oauth.authorize(requestData));
