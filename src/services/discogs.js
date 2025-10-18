@@ -1,5 +1,18 @@
+import OAuth from 'oauth-1.0a';
+import CryptoJS from 'crypto-js';
 import config from '../config/index.js';
 import { oauthNonce, oauthTimestamp, headersFrom } from './utils.js';
+
+const oauth = OAuth({
+  consumer: {
+    key: config.consumerKey,
+    secret: config.consumerSecret,
+  },
+  signature_method: 'HMAC-SHA1',
+  hash_function(base_string, key) {
+    return CryptoJS.HmacSHA1(base_string, key).toString(CryptoJS.enc.Base64);
+  }
+});
 
 const getUser = async (userName) => {
   const requestData = {
@@ -97,6 +110,33 @@ const getAccessToken = async (requestToken, requestTokenSecret, oauthVerifier) =
   const data = { accessToken, accessTokenSecret };
 
   return data;
+};
+
+const getIdentity = async (accessToken, accessTokenSecret) => {
+  const requestData = {
+    url: `${config.baseUrl}/oauth/identity`,
+    method: 'GET'
+  };
+
+  const tokens = {
+    key: accessToken,
+    secret: accessTokenSecret
+  };
+
+  const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
+
+  const res = await fetch(requestData.url, {
+    method: requestData.method,
+    headers: headers
+  })
+
+  if (!res.ok) {
+    throw new Error('Error fetching identity');
+  }
+
+  const data = await res.json();
+
+  return data;
 }
 
-export { getUser, getRequestToken, getAccessToken };
+export { getUser, getRequestToken, getAccessToken, getIdentity };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUser, getRequestToken, getAccessToken } from '../services/discogs.js';
+import { getUser, getRequestToken, getAccessToken, getIdentity } from '../services/discogs.js';
 
 const router = express.Router();
 
@@ -32,6 +32,22 @@ router.post('/oauth/access_token', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-})
+});
+
+router.get('/oauth/identity', async (req, res) => {
+  const accessToken = req.query.accessToken;
+  const accessTokenSecret = req.query.accessTokenSecret;
+
+  if (!accessToken || !accessTokenSecret) {
+    return res.status(400).json({ error: 'Missing access tokens' });
+  };
+
+  try {
+    const data = await getIdentity(accessToken, accessTokenSecret);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 export default router;
