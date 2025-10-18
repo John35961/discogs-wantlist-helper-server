@@ -34,24 +34,16 @@ const getUser = async (userName) => {
 };
 
 const getRequestToken = async () => {
-  const authHeaders = {
-    oauth_consumer_key: config.consumerKey,
-    oauth_nonce: oauthNonce(),
-    oauth_signature: `${config.consumerSecret}&`,
-    oauth_signature_method: 'PLAINTEXT',
-    oauth_timestamp: oauthTimestamp(),
-    oauth_callback: `https://${config.chromeRuntimeId}.chromiumapp.org/`,
-  };
-
   const requestData = {
     url: `${config.baseUrl}/oauth/request_token`,
-    method: 'GET',
-    headers: { 'Authorization': `OAuth ${headersFrom(authHeaders)}` },
+    method: 'GET'
   };
+
+  const headers = oauth.toHeader(oauth.authorize(requestData));
 
   const res = await fetch(requestData.url, {
     method: requestData.method,
-    headers: requestData.headers,
+    headers: headers,
   });
 
   if (!res.ok) {
