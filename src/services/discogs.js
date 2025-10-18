@@ -137,6 +137,34 @@ const getIdentity = async (accessToken, accessTokenSecret) => {
   const data = await res.json();
 
   return data;
-}
+};
 
-export { getUser, getRequestToken, getAccessToken, getIdentity };
+const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId) => {
+  const requestData = {
+    url: `https://api.discogs.com/users/${userName}/wants/${releaseId}`,
+    method: 'PUT'
+  };
+
+  const tokens = {
+    key: accessToken,
+    secret: accessTokenSecret
+  };
+
+  const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
+
+  const res = await fetch(requestData.url, {
+    method: requestData.method,
+    headers: headers,
+    credentials: 'omit',
+  });
+
+  if (!res.ok) {
+    throw new Error('Error adding to wantlist');
+  };
+
+  const data = await res.json();
+
+  return data;
+};
+
+export { getUser, getRequestToken, getAccessToken, getIdentity, addToWantlist };
