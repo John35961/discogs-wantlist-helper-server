@@ -8,19 +8,21 @@ router.get('/users/:userName', async (req, res) => {
 
   try {
     const data = await getUser(userName);
+
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
+  };
 });
 
 router.get('/oauth/request_token', async (_req, res) => {
   try {
     const data = await getRequestToken();
+
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
+  };
 });
 
 router.post('/oauth/access_token', async (req, res) => {
@@ -28,10 +30,11 @@ router.post('/oauth/access_token', async (req, res) => {
 
   try {
     const data = await getAccessToken(requestToken, requestTokenSecret, oauthVerifier);
+
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
+  };
 });
 
 router.get('/oauth/identity', async (req, res) => {
@@ -44,10 +47,11 @@ router.get('/oauth/identity', async (req, res) => {
 
   try {
     const data = await getIdentity(accessToken, accessTokenSecret);
+
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
+  };
 });
 
 router.put('/users/:userName/wants', async (req, res) => {
@@ -62,10 +66,11 @@ router.put('/users/:userName/wants', async (req, res) => {
 
   try {
     const data = await addToWantlist(accessToken, accessTokenSecret, userName, releaseId);
+
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
+  };
 });
 
 export default router;

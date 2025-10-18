@@ -7,6 +7,6 @@ const config = {
   consumerKey: process.env.CONSUMER_KEY,
   consumerSecret: process.env.CONSUMER_SECRET,
   chromeRuntimeId: process.env.CHROME_RUNTIME_ID,
-}
+};
 
 export default config;

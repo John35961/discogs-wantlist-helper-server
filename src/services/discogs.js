@@ -65,11 +65,11 @@ const getAccessToken = async (requestToken, requestTokenSecret, oauthVerifier) =
   const res = await fetch(requestData.url, {
     method: requestData.method,
     headers: headers,
-  })
+  });
 
   if (!res.ok) {
     throw new Error('Error fetching access token');
-  }
+  };
 
   const text = await res.text();
   const params = new URLSearchParams(text)
@@ -78,7 +78,7 @@ const getAccessToken = async (requestToken, requestTokenSecret, oauthVerifier) =
 
   if (!accessToken || !accessTokenSecret) {
     throw new Error('Failed to retrieve access token or access token secret');
-  }
+  };
 
   const data = { accessToken, accessTokenSecret };
 
@@ -101,11 +101,11 @@ const getIdentity = async (accessToken, accessTokenSecret) => {
   const res = await fetch(requestData.url, {
     method: requestData.method,
     headers: headers
-  })
+  });
 
   if (!res.ok) {
     throw new Error('Error fetching identity');
-  }
+  };
 
   const data = await res.json();
 
