@@ -62,28 +62,22 @@ const getRequestToken = async () => {
 };
 
 const getAccessToken = async (requestToken, requestTokenSecret, oauthVerifier) => {
-  const authHeaders = {
-    oauth_consumer_key: config.consumerKey,
-    oauth_nonce: oauthNonce(),
-    oauth_token: requestToken,
-    oauth_signature: `${config.consumerSecret}&${requestTokenSecret}`,
-    oauth_signature_method: 'PLAINTEXT',
-    oauth_timestamp: oauthTimestamp(),
-    oauth_verifier: oauthVerifier,
-  };
-
   const requestData = {
     url: `${config.baseUrl}/oauth/access_token`,
     method: 'POST',
-    headers: {
-      'Authorization': `OAuth ${headersFrom(authHeaders)}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
+    data: { oauth_verifier: oauthVerifier },
   };
+
+  const tokens = {
+    key: requestToken,
+    secret: requestTokenSecret
+  };
+
+  const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
 
   const res = await fetch(requestData.url, {
     method: requestData.method,
-    headers: requestData.headers,
+    headers: headers,
   })
 
   if (!res.ok) {
