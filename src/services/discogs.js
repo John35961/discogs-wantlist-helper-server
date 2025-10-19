@@ -1,6 +1,8 @@
 import config from '../config/index.js';
 import { oauth } from './oauth.js';
 
+const MAX_ADDED_SINCE_IN_SECONDS = 3;
+
 const getUser = async (userName) => {
   const requestData = {
     url: `${config.baseUrl}/users/${userName}`,
@@ -137,6 +139,13 @@ const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId
   };
 
   const data = await res.json();
+
+  const dateAdded = new Date(data.date_added);
+  const addedSince = (Date.now() - dateAdded.getTime()) / 1000;
+
+  if (addedSince > MAX_ADDED_SINCE_IN_SECONDS) {
+    throw new Error('Already in wantlist');
+  };
 
   return data;
 };
