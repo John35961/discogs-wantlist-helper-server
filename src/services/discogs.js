@@ -115,7 +115,7 @@ const getIdentity = async (accessToken, accessTokenSecret) => {
 
 const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId) => {
   const requestData = {
-    url: `https://api.discogs.com/users/${userName}/wants/${releaseId}`,
+    url: `${config.baseUrl}/users/${userName}/wants/${releaseId}`,
     method: 'PUT'
   };
 
