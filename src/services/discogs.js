@@ -20,11 +20,11 @@ const getUser = async (userName) => {
   return data;
 };
 
-const getRequestToken = async () => {
+const getRequestToken = async (chromeRuntimeId) => {
   const requestData = {
     url: `${config.baseUrl}/oauth/request_token`,
     method: 'GET',
-    data: { oauth_callback: `https://${config.chromeRuntimeId}.chromiumapp.org/` }
+    data: { oauth_callback: `https://${chromeRuntimeId}.chromiumapp.org/` }
   };
 
   const headers = oauth.toHeader(oauth.authorize(requestData));

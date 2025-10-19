@@ -15,9 +15,11 @@ router.get('/users/:userName', async (req, res) => {
   };
 });
 
-router.get('/oauth/request_token', async (_req, res) => {
+router.get('/oauth/request_token', async (req, res) => {
+  const chromeRuntimeId = req.query.chromeRuntimeId;
+
   try {
-    const data = await getRequestToken();
+    const data = await getRequestToken(chromeRuntimeId);
 
     res.json(data);
   } catch (error) {
