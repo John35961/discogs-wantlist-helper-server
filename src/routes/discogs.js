@@ -55,10 +55,9 @@ router.get('/oauth/identity', async (req, res) => {
 });
 
 router.put('/users/:userName/wants/:releaseId', async (req, res) => {
-  const accessToken = req.query.accessToken;
-  const accessTokenSecret = req.query.accessTokenSecret;
   const userName = req.params.userName;
   const releaseId = req.params.releaseId;
+  const { accessToken, accessTokenSecret } = req.body;
 
   if (!accessToken || !accessTokenSecret) {
     return res.status(400).json({ error: 'Missing access tokens' });
