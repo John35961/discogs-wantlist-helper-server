@@ -1,4 +1,5 @@
 import config from '../config/index.js';
+import { formatReleasesFrom } from '../services/utils.js';
 import { oauth } from './oauth.js';
 
 const MAX_ADDED_SINCE_IN_SECONDS = 3;
@@ -115,6 +116,40 @@ const getIdentity = async (accessToken, accessTokenSecret) => {
   return data;
 };
 
+const searchForReleases = async (accessToken, accessTokenSecret, query) => {
+  const url = new URL(`${config.baseUrl}/database/search`);
+  url.searchParams.set('q', query);
+  url.searchParams.set('per_page', 5);
+  url.searchParams.set('type', 'release');
+
+  const requestData = {
+    url: url.href,
+    method: 'GET'
+  };
+
+  const tokens = {
+    key: accessToken,
+    secret: accessTokenSecret
+  };
+
+  const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
+
+  const res = await fetch(requestData.url, {
+    method: 'GET',
+    headers: headers,
+  });
+
+  if (!res.ok) {
+    throw new Error('Error searching for releases');
+  };
+
+  let data = await res.json();
+
+  data = formatReleasesFrom(data);
+
+  return data;
+}
+
 const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId) => {
   const requestData = {
     url: `${config.baseUrl}/users/${userName}/wants/${releaseId}`,
@@ -150,4 +185,4 @@ const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId
   return data;
 };
 
-export { getUser, getRequestToken, getAccessToken, getIdentity, addToWantlist };
+export { getUser, getRequestToken, getAccessToken, getIdentity, searchForReleases, addToWantlist };

@@ -1,5 +1,12 @@
 import express from 'express';
-import { getUser, getRequestToken, getAccessToken, getIdentity, addToWantlist } from '../services/discogs.js';
+import {
+  getUser,
+  getRequestToken,
+  getAccessToken,
+  getIdentity,
+  addToWantlist,
+  searchForReleases
+} from '../services/discogs.js';
 
 const router = express.Router();
 
@@ -49,6 +56,20 @@ router.get('/oauth/identity', async (req, res) => {
 
   try {
     const data = await getIdentity(accessToken, accessTokenSecret);
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  };
+});
+
+router.get('/database/search', async (req, res) => {
+  const accessToken = req.query.accessToken;
+  const accessTokenSecret = req.query.accessTokenSecret;
+  const query = req.query.q;
+
+  try {
+    const data = await searchForReleases(accessToken, accessTokenSecret, query);
 
     res.json(data);
   } catch (error) {
