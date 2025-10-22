@@ -1,5 +1,5 @@
 import config from '../config/index.js';
-import { formatReleasesFrom } from '../services/utils.js';
+import { formatReleaseFrom, formatReleasesFrom } from '../services/utils.js';
 import { oauth } from './oauth.js';
 
 const MAX_ADDED_SINCE_IN_SECONDS = 3;
@@ -168,7 +168,7 @@ const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId
     throw new Error('Error adding to wantlist');
   };
 
-  const data = await res.json();
+  let data = await res.json();
 
   const dateAdded = new Date(data.date_added);
   const addedSince = (Date.now() - dateAdded.getTime()) / 1000;
@@ -176,6 +176,8 @@ const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId
   if (addedSince > MAX_ADDED_SINCE_IN_SECONDS) {
     throw new Error('Already in wantlist');
   };
+
+  data = formatReleaseFrom(data);
 
   return data;
 };
