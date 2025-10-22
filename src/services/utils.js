@@ -4,7 +4,8 @@ const formatReleasesFrom = (data) => {
       id: result.id,
       title: result.title,
       thumb: result.thumb,
-      uri: result.uri,
+      uri: `https://discogs.com/release/${result.id}`,
+      year: result.year,
     }
   })
 };
