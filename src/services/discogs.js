@@ -140,6 +140,10 @@ const searchForReleases = async (accessToken, accessTokenSecret, query) => {
 
   let data = await res.json();
 
+  if (data.results.length === 0) {
+    throw new Error('No release found');
+  };
+
   data = formatReleasesFrom(data);
 
   return data;
