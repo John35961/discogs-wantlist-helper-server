@@ -117,13 +117,8 @@ const getIdentity = async (accessToken, accessTokenSecret) => {
 };
 
 const searchForReleases = async (accessToken, accessTokenSecret, query) => {
-  const url = new URL(`${config.baseUrl}/database/search`);
-  url.searchParams.set('q', query);
-  url.searchParams.set('per_page', 5);
-  url.searchParams.set('type', 'release');
-
   const requestData = {
-    url: url.href,
+    url: `${config.baseUrl}/database/search?q=${query}&per_page=5&type=release`,
     method: 'GET'
   };
 
