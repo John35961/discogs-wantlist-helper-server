@@ -24,3 +24,5 @@ To make calls, you'll need to create a [Discogs API V2 application](https://www.
 2. Install dependencies with `npm install`
 
 3. Start the server with `npm start`
+
+4. Server is running at `http://localhost:3000/discogs/api/v1`
