@@ -1,7 +1,7 @@
 import config from './config/index.js';
 import express from 'express';
 import cors from 'cors';
-import discogsRouter from './routes/discogs.js';
+import V1DiscogsRouter from './routes/discogs.js';
 
 const app = express();
 
@@ -11,6 +11,6 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/discogs', discogsRouter);
+app.use('/discogs/api/v1', V1DiscogsRouter);
 
 app.listen(config.port);
