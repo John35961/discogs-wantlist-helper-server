@@ -6,7 +6,7 @@ const MAX_ADDED_SINCE_IN_SECONDS = 3;
 
 const getUser = async (userName) => {
   const requestData = {
-    url: `${config.baseUrl}/users/${userName}`,
+    url: `${config.discogsApiBaseUrl}/users/${userName}`,
     method: 'GET'
   };
 
@@ -25,7 +25,7 @@ const getUser = async (userName) => {
 
 const getRequestToken = async (chromeRuntimeId) => {
   const requestData = {
-    url: `${config.baseUrl}/oauth/request_token`,
+    url: `${config.discogsApiBaseUrl}/oauth/request_token`,
     method: 'GET',
     data: { oauth_callback: `https://${chromeRuntimeId}.chromiumapp.org/` }
   };
@@ -54,7 +54,7 @@ const getRequestToken = async (chromeRuntimeId) => {
 
 const getAccessToken = async (requestToken, requestTokenSecret, oauthVerifier) => {
   const requestData = {
-    url: `${config.baseUrl}/oauth/access_token`,
+    url: `${config.discogsApiBaseUrl}/oauth/access_token`,
     method: 'POST',
     data: { oauth_verifier: oauthVerifier },
   };
@@ -91,7 +91,7 @@ const getAccessToken = async (requestToken, requestTokenSecret, oauthVerifier) =
 
 const getIdentity = async (accessToken, accessTokenSecret) => {
   const requestData = {
-    url: `${config.baseUrl}/oauth/identity`,
+    url: `${config.discogsApiBaseUrl}/oauth/identity`,
     method: 'GET'
   };
 
@@ -118,7 +118,7 @@ const getIdentity = async (accessToken, accessTokenSecret) => {
 
 const searchForReleases = async (accessToken, accessTokenSecret, query) => {
   const requestData = {
-    url: `${config.baseUrl}/database/search?q=${query}&per_page=5&type=release`,
+    url: `${config.discogsApiBaseUrl}/database/search?q=${query}&per_page=5&type=release`,
     method: 'GET'
   };
 
@@ -151,7 +151,7 @@ const searchForReleases = async (accessToken, accessTokenSecret, query) => {
 
 const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId) => {
   const requestData = {
-    url: `${config.baseUrl}/users/${userName}/wants/${releaseId}`,
+    url: `${config.discogsApiBaseUrl}/users/${userName}/wants/${releaseId}`,
     method: 'PUT'
   };
 

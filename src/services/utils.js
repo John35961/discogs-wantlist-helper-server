@@ -1,3 +1,5 @@
+import config from '../config/index.js';
+
 const formatReleaseFrom = (data) => {
   const release = data.basic_information;
 
@@ -7,7 +9,7 @@ const formatReleaseFrom = (data) => {
       title: release.title,
       thumb: release.thumb,
       artists: parseArtists(release.artists),
-      uri: `https://discogs.com/release/${release.id}`,
+      uri: `${config.discogsWebsiteBaseUrl}/release/${release.id}`,
       year: release.year,
     }
   };
@@ -16,12 +18,12 @@ const formatReleaseFrom = (data) => {
 const formatReleasesFrom = (data) => {
   return data.results.map((result) => {
     return {
-      message: 'Add',
+      message: 'Want',
       release: {
         id: result.id,
         title: result.title,
         thumb: result.thumb,
-        uri: `https://discogs.com/release/${result.id}`,
+        uri: `${config.discogsWebsiteBaseUrl}/release/${result.id}`,
         year: result.year,
       }
     };
