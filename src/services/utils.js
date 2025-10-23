@@ -7,10 +7,10 @@ const formatReleaseFrom = (data) => {
     message: 'Added to wantlist',
     release: {
       title: release.title,
-      thumb: release.thumb,
       artists: parseArtists(release.artists),
-      uri: `${config.discogsWebsiteBaseUrl}/release/${release.id}`,
+      thumb: release.thumb,
       year: release.year,
+      uri: `${config.discogsWebsiteBaseUrl}/release/${release.id}`,
     }
   };
 };
@@ -22,9 +22,10 @@ const formatReleasesFrom = (data) => {
       release: {
         id: result.id,
         title: result.title,
+        styles: parseStyles(result.style),
         thumb: result.thumb,
-        uri: `${config.discogsWebsiteBaseUrl}/release/${result.id}`,
         year: result.year,
+        uri: `${config.discogsWebsiteBaseUrl}/release/${result.id}`,
       }
     };
   });
@@ -34,4 +35,8 @@ const parseArtists = (artists) => {
   return artists.map((artist) => { return artist.name }).join(', ');
 };
 
-export { formatReleaseFrom, formatReleasesFrom, parseArtists };
+const parseStyles = (styles) => {
+  return styles.join(', ');
+};
+
+export { formatReleaseFrom, formatReleasesFrom };
