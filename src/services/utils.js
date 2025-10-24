@@ -25,7 +25,7 @@ export const formatReleaseFrom = (data) => {
       artists: parseArtists(release.artists),
       thumb: release.thumb,
       year: release.year,
-      uri: `${config.discogsWebsiteBaseUrl}/release/${release.id}`,
+      uri: releaseUriFrom(release.id),
     }
   };
 };
@@ -40,7 +40,7 @@ export const formatReleasesFrom = (data) => {
         styles: parseStyles(result.style),
         thumb: result.thumb,
         year: result.year,
-        uri: `${config.discogsWebsiteBaseUrl}/release/${result.id}`,
+        uri: releaseUriFrom(result.id),
       }
     };
   });
@@ -52,4 +52,8 @@ const parseArtists = (artists) => {
 
 const parseStyles = (styles) => {
   return styles.join(', ');
+};
+
+const releaseUriFrom = (releaseId) => {
+  return `${config.discogsWebsiteBaseUrl}/release/${releaseId}`;
 };
