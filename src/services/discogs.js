@@ -4,186 +4,186 @@ import { oauth } from './oauth.js';
 
 const MAX_ADDED_SINCE_IN_SECONDS = 3;
 
-const getUser = async (userName) => {
-  const requestData = {
-    url: `${config.discogsApiBaseUrl}/users/${userName}`,
-    method: 'GET'
-  };
+export default {
+  async getUser(userName) {
+    const requestData = {
+      url: `${config.discogsApiBaseUrl}/users/${userName}`,
+      method: 'GET'
+    };
 
-  const res = await fetch(requestData.url, {
-    method: requestData.method,
-  });
+    const res = await fetch(requestData.url, {
+      method: requestData.method,
+    });
 
-  if (!res.ok) {
-    throw new Error('Error fetching user');
-  };
+    if (!res.ok) {
+      throw new Error('Error fetching user');
+    };
 
-  const data = await res.json();
+    const data = await res.json();
 
-  return data;
-};
+    return data;
+  },
 
-const getRequestToken = async (chromeRuntimeId) => {
-  const requestData = {
-    url: `${config.discogsApiBaseUrl}/oauth/request_token`,
-    method: 'GET',
-    data: { oauth_callback: `https://${chromeRuntimeId}.chromiumapp.org/` }
-  };
+  async getRequestToken(chromeRuntimeId) {
+    const requestData = {
+      url: `${config.discogsApiBaseUrl}/oauth/request_token`,
+      method: 'GET',
+      data: { oauth_callback: `https://${chromeRuntimeId}.chromiumapp.org/` }
+    };
 
-  const headers = oauth.toHeader(oauth.authorize(requestData));
+    const headers = oauth.toHeader(oauth.authorize(requestData));
 
-  const res = await fetch(requestData.url, {
-    method: requestData.method,
-    headers: headers,
-  });
+    const res = await fetch(requestData.url, {
+      method: requestData.method,
+      headers: headers,
+    });
 
-  if (!res.ok) {
-    throw new Error('Error fetching request token');
-  };
+    if (!res.ok) {
+      throw new Error('Error fetching request token');
+    };
 
-  const text = await res.text();
-  const params = new URLSearchParams(text);
+    const text = await res.text();
+    const params = new URLSearchParams(text);
 
-  const data = {
-    requestToken: params.get('oauth_token'),
-    requestTokenSecret: params.get('oauth_token_secret')
-  };
+    const data = {
+      requestToken: params.get('oauth_token'),
+      requestTokenSecret: params.get('oauth_token_secret')
+    };
 
-  return data;
-};
+    return data;
+  },
 
-const getAccessToken = async (requestToken, requestTokenSecret, oauthVerifier) => {
-  const requestData = {
-    url: `${config.discogsApiBaseUrl}/oauth/access_token`,
-    method: 'POST',
-    data: { oauth_verifier: oauthVerifier },
-  };
+  async getAccessToken(requestToken, requestTokenSecret, oauthVerifier) {
+    const requestData = {
+      url: `${config.discogsApiBaseUrl}/oauth/access_token`,
+      method: 'POST',
+      data: { oauth_verifier: oauthVerifier },
+    };
 
-  const tokens = {
-    key: requestToken,
-    secret: requestTokenSecret
-  };
+    const tokens = {
+      key: requestToken,
+      secret: requestTokenSecret
+    };
 
-  const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
+    const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
 
-  const res = await fetch(requestData.url, {
-    method: requestData.method,
-    headers: headers,
-  });
+    const res = await fetch(requestData.url, {
+      method: requestData.method,
+      headers: headers,
+    });
 
-  if (!res.ok) {
-    throw new Error('Error fetching access token');
-  };
+    if (!res.ok) {
+      throw new Error('Error fetching access token');
+    };
 
-  const text = await res.text();
-  const params = new URLSearchParams(text)
-  const accessToken = params.get('oauth_token');
-  const accessTokenSecret = params.get('oauth_token_secret');
+    const text = await res.text();
+    const params = new URLSearchParams(text)
+    const accessToken = params.get('oauth_token');
+    const accessTokenSecret = params.get('oauth_token_secret');
 
-  if (!accessToken || !accessTokenSecret) {
-    throw new Error('Failed to retrieve access token or access token secret');
-  };
+    if (!accessToken || !accessTokenSecret) {
+      throw new Error('Failed to retrieve access token or access token secret');
+    };
 
-  const data = { accessToken, accessTokenSecret };
+    const data = { accessToken, accessTokenSecret };
 
-  return data;
-};
+    return data;
+  },
 
-const getIdentity = async (accessToken, accessTokenSecret) => {
-  const requestData = {
-    url: `${config.discogsApiBaseUrl}/oauth/identity`,
-    method: 'GET'
-  };
+  async getIdentity(accessToken, accessTokenSecret) {
+    const requestData = {
+      url: `${config.discogsApiBaseUrl}/oauth/identity`,
+      method: 'GET'
+    };
 
-  const tokens = {
-    key: accessToken,
-    secret: accessTokenSecret
-  };
+    const tokens = {
+      key: accessToken,
+      secret: accessTokenSecret
+    };
 
-  const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
+    const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
 
-  const res = await fetch(requestData.url, {
-    method: requestData.method,
-    headers: headers
-  });
+    const res = await fetch(requestData.url, {
+      method: requestData.method,
+      headers: headers
+    });
 
-  if (!res.ok) {
-    throw new Error('Error fetching identity');
-  };
+    if (!res.ok) {
+      throw new Error('Error fetching identity');
+    };
 
-  const data = await res.json();
+    const data = await res.json();
 
-  return data;
-};
+    return data;
+  },
 
-const searchForReleases = async (accessToken, accessTokenSecret, query) => {
-  const requestData = {
-    url: `${config.discogsApiBaseUrl}/database/search?q=${query}&per_page=5&type=release`,
-    method: 'GET'
-  };
+  async searchDatabase(accessToken, accessTokenSecret, query) {
+    const requestData = {
+      url: `${config.discogsApiBaseUrl}/database/search?q=${query}&per_page=5&type=release`,
+      method: 'GET'
+    };
 
-  const tokens = {
-    key: accessToken,
-    secret: accessTokenSecret
-  };
+    const tokens = {
+      key: accessToken,
+      secret: accessTokenSecret
+    };
 
-  const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
+    const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
 
-  const res = await fetch(requestData.url, {
-    method: 'GET',
-    headers: headers,
-  });
+    const res = await fetch(requestData.url, {
+      method: 'GET',
+      headers: headers,
+    });
 
-  if (!res.ok) {
-    throw new Error('Error searching for releases');
-  };
+    if (!res.ok) {
+      throw new Error('Error searching for releases');
+    };
 
-  let data = await res.json();
+    let data = await res.json();
 
-  if (data.results.length === 0) {
-    throw new Error('No release found');
-  };
+    if (data.results.length === 0) {
+      throw new Error('No release found');
+    };
 
-  data = formatReleasesFrom(data);
+    data = formatReleasesFrom(data);
 
-  return data;
+    return data;
+  },
+
+  async addToWantlist(accessToken, accessTokenSecret, userName, releaseId) {
+    const requestData = {
+      url: `${config.discogsApiBaseUrl}/users/${userName}/wants/${releaseId}`,
+      method: 'PUT'
+    };
+
+    const tokens = {
+      key: accessToken,
+      secret: accessTokenSecret
+    };
+
+    const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
+
+    const res = await fetch(requestData.url, {
+      method: requestData.method,
+      headers: headers,
+      credentials: 'omit',
+    });
+
+    if (!res.ok) {
+      throw new Error('Error adding to wantlist');
+    };
+
+    let data = await res.json();
+
+    const dateAdded = new Date(data.date_added);
+    const addedSince = (Date.now() - dateAdded.getTime()) / 1000;
+
+    if (addedSince > MAX_ADDED_SINCE_IN_SECONDS) {
+      throw new Error('Already in wantlist');
+    };
+
+    data = formatReleaseFrom(data);
+
+    return data;
+  },
 }
-
-const addToWantlist = async (accessToken, accessTokenSecret, userName, releaseId) => {
-  const requestData = {
-    url: `${config.discogsApiBaseUrl}/users/${userName}/wants/${releaseId}`,
-    method: 'PUT'
-  };
-
-  const tokens = {
-    key: accessToken,
-    secret: accessTokenSecret
-  };
-
-  const headers = oauth.toHeader(oauth.authorize(requestData, tokens));
-
-  const res = await fetch(requestData.url, {
-    method: requestData.method,
-    headers: headers,
-    credentials: 'omit',
-  });
-
-  if (!res.ok) {
-    throw new Error('Error adding to wantlist');
-  };
-
-  let data = await res.json();
-
-  const dateAdded = new Date(data.date_added);
-  const addedSince = (Date.now() - dateAdded.getTime()) / 1000;
-
-  if (addedSince > MAX_ADDED_SINCE_IN_SECONDS) {
-    throw new Error('Already in wantlist');
-  };
-
-  data = formatReleaseFrom(data);
-
-  return data;
-};
-
-export { getUser, getRequestToken, getAccessToken, getIdentity, searchForReleases, addToWantlist };

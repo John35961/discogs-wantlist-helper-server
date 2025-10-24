@@ -1,98 +1,15 @@
 import express from 'express';
-import {
-  getUser,
-  getRequestToken,
-  getAccessToken,
-  getIdentity,
-  addToWantlist,
-  searchForReleases
-} from '../services/discogs.js';
+import { getRequestToken, getAccessToken, getIdentity } from '../controllers/oauth.js';
+import { getUser, addToWantlist } from '../controllers/user.js';
+import { searchDatabase } from '../controllers/search.js';
 
 const router = express.Router();
 
-router.get('/users/:userName', async (req, res) => {
-  const userName = req.params.userName;
-
-  try {
-    const data = await getUser(userName);
-
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  };
-});
-
-router.get('/oauth/request_token', async (req, res) => {
-  const chromeRuntimeId = req.query.chromeRuntimeId;
-
-  try {
-    const data = await getRequestToken(chromeRuntimeId);
-
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  };
-});
-
-router.post('/oauth/access_token', async (req, res) => {
-  const { requestToken, requestTokenSecret, oauthVerifier } = req.body;
-
-  try {
-    const data = await getAccessToken(requestToken, requestTokenSecret, oauthVerifier);
-
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  };
-});
-
-router.get('/oauth/identity', async (req, res) => {
-  const accessToken = req.query.accessToken;
-  const accessTokenSecret = req.query.accessTokenSecret;
-
-  if (!accessToken || !accessTokenSecret) {
-    return res.status(400).json({ error: 'Missing access tokens' });
-  };
-
-  try {
-    const data = await getIdentity(accessToken, accessTokenSecret);
-
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  };
-});
-
-router.get('/database/search', async (req, res) => {
-  const accessToken = req.query.accessToken;
-  const accessTokenSecret = req.query.accessTokenSecret;
-  const query = req.query.q;
-
-  try {
-    const data = await searchForReleases(accessToken, accessTokenSecret, query);
-
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  };
-});
-
-router.put('/users/:userName/wants/:releaseId', async (req, res) => {
-  const userName = req.params.userName;
-  const releaseId = req.params.releaseId;
-  const { accessToken, accessTokenSecret } = req.body;
-
-  if (!accessToken || !accessTokenSecret) {
-    return res.status(400).json({ error: 'Missing access tokens' });
-  };
-
-  try {
-    const data = await addToWantlist(accessToken, accessTokenSecret, userName, releaseId);
-
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  };
-});
+router.get('/oauth/request_token', getRequestToken);
+router.post('/oauth/access_token', getAccessToken);
+router.get('/oauth/identity', getIdentity);
+router.get('/users/:userName', getUser);
+router.put('/users/:userName/wants/:releaseId', addToWantlist);
+router.get('/database/search', searchDatabase);
 
 export default router;
