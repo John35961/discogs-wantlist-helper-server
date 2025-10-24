@@ -33,7 +33,7 @@ export const getIdentity = async (req, res) => {
   };
 
   try {
-    const data = await getIdentity(accessToken, accessTokenSecret);
+    const data = await discogsService.getIdentity(accessToken, accessTokenSecret);
 
     res.json(data);
   } catch (error) {
