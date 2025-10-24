@@ -1,5 +1,5 @@
 import config from '../config/index.js';
-import { formatReleaseFrom, formatReleasesFrom } from '../services/utils.js';
+import { formatUserFrom, formatReleaseFrom, formatReleasesFrom } from '../services/utils.js';
 import { oauth } from './oauth.js';
 
 const MAX_ADDED_SINCE_IN_SECONDS = 3;
@@ -19,7 +19,9 @@ export default {
       throw new Error('Error fetching user');
     };
 
-    const data = await res.json();
+    let data = await res.json();
+
+    data = formatUserFrom(data);
 
     return data;
   },

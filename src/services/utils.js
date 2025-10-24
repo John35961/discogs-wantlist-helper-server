@@ -1,6 +1,21 @@
 import config from '../config/index.js';
 
-const formatReleaseFrom = (data) => {
+export const formatUserFrom = (data) => {
+  const user = data;
+
+  return {
+    user: {
+      name: user.name,
+      username: user.username,
+      avatar_url: user.avatar_url,
+      num_collection: user.num_collection,
+      num_wantlist: user.num_wantlist,
+      uri: user.uri,
+    }
+  };
+};
+
+export const formatReleaseFrom = (data) => {
   const release = data.basic_information;
 
   return {
@@ -15,7 +30,7 @@ const formatReleaseFrom = (data) => {
   };
 };
 
-const formatReleasesFrom = (data) => {
+export const formatReleasesFrom = (data) => {
   return data.results.map((result) => {
     return {
       message: 'Want',
@@ -38,5 +53,3 @@ const parseArtists = (artists) => {
 const parseStyles = (styles) => {
   return styles.join(', ');
 };
-
-export { formatReleaseFrom, formatReleasesFrom };
