@@ -5,8 +5,7 @@ export const formatUserFrom = (data) => {
 
   return {
     user: {
-      name: user.name,
-      username: user.username,
+      name: user.name || user.username,
       avatar_url: user.avatar_url,
       num_collection: user.num_collection,
       num_wantlist: user.num_wantlist,
