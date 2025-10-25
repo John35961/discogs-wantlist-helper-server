@@ -8,7 +8,7 @@ export const getRequestToken = async (req, res, next) => {
 
     res.json(data);
   } catch (error) {
-    next();
+    next(error);
   };
 };
 
@@ -20,7 +20,7 @@ export const getAccessToken = async (req, res, next) => {
 
     res.json(data);
   } catch (error) {
-    next();
+    next(error);
   };
 };
 
@@ -37,6 +37,6 @@ export const getIdentity = async (req, res, next) => {
 
     res.json(data);
   } catch (error) {
-    next();
+    next(error);
   };
 };
