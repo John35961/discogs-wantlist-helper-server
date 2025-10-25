@@ -1,6 +1,6 @@
 import config from '../config/index.config.js';
 import oauth from './oauth.utils.js';
-import { discogsError, formatUserFrom, formatReleaseFrom } from './discogs.utils.js';
+import { formatUserFrom, formatReleaseFrom } from './discogs.utils.js';
 import { ApiError } from '../utils/apiError.js';
 
 const MAX_ADDED_SINCE_IN_SECONDS = 3;
