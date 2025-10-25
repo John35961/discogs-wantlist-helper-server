@@ -1,5 +1,6 @@
 import config from '../config/index.config.js';
 import oauth from './oauth.utils.js';
+import { ApiError } from '../utils/apiError.js';
 
 export default {
   async getRequestToken(chromeRuntimeId) {
