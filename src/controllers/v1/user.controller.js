@@ -1,10 +1,10 @@
-import discogsService from "../../services/discogs.service.js";
+import discogsUserService from "../../services/user.service.js";
 
 export const getUser = async (req, res) => {
   const userName = req.params.userName;
 
   try {
-    const data = await discogsService.getUser(userName);
+    const data = await discogsUserService.getUser(userName);
 
     res.json(data);
   } catch (error) {
@@ -22,7 +22,7 @@ export const addToWantlist = async (req, res) => {
   };
 
   try {
-    const data = await discogsService.addToWantlist(accessToken, accessTokenSecret, userName, releaseId);
+    const data = await discogsUserService.addToWantlist(accessToken, accessTokenSecret, userName, releaseId);
 
     res.json(data);
   } catch (error) {

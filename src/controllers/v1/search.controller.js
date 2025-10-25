@@ -1,4 +1,4 @@
-import discogsService from "../../services/discogs.service.js";
+import searchService from "../../services/search.service.js";
 
 export const searchDatabase = async (req, res) => {
   const accessToken = req.query.accessToken;
@@ -6,7 +6,7 @@ export const searchDatabase = async (req, res) => {
   const query = req.query.q;
 
   try {
-    const data = await discogsService.searchDatabase(accessToken, accessTokenSecret, query);
+    const data = await searchService.searchDatabase(accessToken, accessTokenSecret, query);
 
     res.json(data);
   } catch (error) {

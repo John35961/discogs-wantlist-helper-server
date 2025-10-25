@@ -1,10 +1,10 @@
-import discogsService from "../../services/discogs.service.js";
+import oauthService from "../../services/oauth.service.js";
 
 export const getRequestToken = async (req, res) => {
   const chromeRuntimeId = req.query.chromeRuntimeId;
 
   try {
-    const data = await discogsService.getRequestToken(chromeRuntimeId);
+    const data = await oauthService.getRequestToken(chromeRuntimeId);
 
     res.json(data);
   } catch (error) {
@@ -16,7 +16,7 @@ export const getAccessToken = async (req, res) => {
   const { requestToken, requestTokenSecret, oauthVerifier } = req.body;
 
   try {
-    const data = await discogsService.getAccessToken(requestToken, requestTokenSecret, oauthVerifier);
+    const data = await oauthService.getAccessToken(requestToken, requestTokenSecret, oauthVerifier);
 
     res.json(data);
   } catch (error) {
@@ -33,7 +33,7 @@ export const getIdentity = async (req, res) => {
   };
 
   try {
-    const data = await discogsService.getIdentity(accessToken, accessTokenSecret);
+    const data = await oauthService.getIdentity(accessToken, accessTokenSecret);
 
     res.json(data);
   } catch (error) {
