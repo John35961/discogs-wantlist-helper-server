@@ -1,4 +1,4 @@
-import config from './config/index.js';
+import config from './config/index.config.js';
 import express from 'express';
 import cors from 'cors';
 import V1DiscogsRouter from './routes/v1/index.js';

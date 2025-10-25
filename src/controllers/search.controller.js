@@ -1,4 +1,4 @@
-import discogsService from "../services/discogs.js";
+import discogsService from "../services/discogs.service.js";
 
 export const searchDatabase = async (req, res) => {
   const accessToken = req.query.accessToken;

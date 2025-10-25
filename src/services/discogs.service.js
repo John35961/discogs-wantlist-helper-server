@@ -1,6 +1,6 @@
-import config from '../config/index.js';
-import { formatUserFrom, formatReleaseFrom, formatReleasesFrom } from '../services/utils.js';
-import { oauth } from './oauth.js';
+import config from '../config/index.config.js';
+import { formatUserFrom, formatReleaseFrom, formatReleasesFrom } from './utils.service.js';
+import { oauth } from './oauth.service.js';
 
 const MAX_ADDED_SINCE_IN_SECONDS = 3;
 

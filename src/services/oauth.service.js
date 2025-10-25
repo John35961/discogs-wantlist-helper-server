@@ -1,6 +1,6 @@
 import OAuth from 'oauth-1.0a';
 import CryptoJS from 'crypto-js';
-import config from '../config/index.js';
+import config from '../config/index.config.js';
 
 const oauth = OAuth({
   consumer: {

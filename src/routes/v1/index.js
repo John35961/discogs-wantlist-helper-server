@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import oauthRoutes from './oauth.js';
-import userRoutes from './user.js';
-import searchRoutes from './search.js';
+import oauthRoutes from './oauth.routes.js';
+import userRoutes from './user.routes.js';
+import searchRoutes from './search.routes.js';
 
 const router = Router();
 
