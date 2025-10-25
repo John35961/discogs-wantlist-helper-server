@@ -1,6 +1,6 @@
 import oauthService from "../../services/oauth.service.js";
 
-export const getRequestToken = async (req, res) => {
+export const getRequestToken = async (req, res, next) => {
   const chromeRuntimeId = req.query.chromeRuntimeId;
 
   try {
@@ -8,11 +8,11 @@ export const getRequestToken = async (req, res) => {
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next();
   };
 };
 
-export const getAccessToken = async (req, res) => {
+export const getAccessToken = async (req, res, next) => {
   const { requestToken, requestTokenSecret, oauthVerifier } = req.body;
 
   try {
@@ -20,11 +20,11 @@ export const getAccessToken = async (req, res) => {
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next();
   };
 };
 
-export const getIdentity = async (req, res) => {
+export const getIdentity = async (req, res, next) => {
   const accessToken = req.query.accessToken;
   const accessTokenSecret = req.query.accessTokenSecret;
 
@@ -37,6 +37,6 @@ export const getIdentity = async (req, res) => {
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next();
   };
 };
