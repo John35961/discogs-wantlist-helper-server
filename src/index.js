@@ -1,7 +1,7 @@
 import config from './config/index.js';
 import express from 'express';
 import cors from 'cors';
-import V1DiscogsRouter from './routes/discogs.js';
+import V1DiscogsRouter from './routes/v1/index.js';
 
 const app = express();
 
