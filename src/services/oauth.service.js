@@ -84,4 +84,4 @@ export default {
 
     return data;
   },
-}
+};
