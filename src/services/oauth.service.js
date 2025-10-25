@@ -17,14 +17,14 @@ export default {
       headers: headers,
     });
 
-    if (!res.ok) throw new ApiError(res.status, 'Error fetching request token', data);
+    if (!res.ok) throw new ApiError(res.status, 'Error fetching request token');
 
     const text = await res.text();
     const params = new URLSearchParams(text);
     const requestToken = params.get('oauth_token');
     const requestTokenSecret = params.get('oauth_token_secret');
 
-    if (!requestToken || !requestTokenSecret) throw new ApiError(res.status, 'Request tokens missing', data);
+    if (!requestToken || !requestTokenSecret) throw new ApiError(res.status, 'Request tokens missing');
 
     return { requestToken, requestTokenSecret };
   },
@@ -48,14 +48,14 @@ export default {
       headers: headers,
     });
 
-    if (!res.ok) throw new ApiError(res.status, 'Error fetching access tokens', data);
+    if (!res.ok) throw new ApiError(res.status, 'Error fetching access tokens');
 
     const text = await res.text();
     const params = new URLSearchParams(text)
     const accessToken = params.get('oauth_token');
     const accessTokenSecret = params.get('oauth_token_secret');
 
-    if (!accessToken || !accessTokenSecret) throw new ApiError(res.status, 'Access tokens missing', data);
+    if (!accessToken || !accessTokenSecret) throw new ApiError(res.status, 'Access tokens missing');
 
     return { accessToken, accessTokenSecret };
   },
@@ -78,7 +78,7 @@ export default {
       headers: headers
     });
 
-    if (!res.ok) throw new new ApiError(res.status, 'Error fetching identity', data);
+    if (!res.ok) throw new new ApiError(res.status, 'Error fetching identity');
 
     const data = await res.json();
 

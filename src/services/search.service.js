@@ -22,11 +22,11 @@ export default {
       headers: headers,
     });
 
-    if (!res.ok) throw new ApiError(res.status, 'Error fetching releases', data);
+    if (!res.ok) throw new ApiError(res.status, 'Error fetching releases');
 
     let data = await res.json();
 
-    if (data.results.length === 0) throw new ApiError(404, 'No release found', data);
+    if (data.results.length === 0) throw new ApiError(404, 'No release found');
 
     data = formatReleasesFrom(data);
 

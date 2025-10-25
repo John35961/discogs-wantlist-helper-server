@@ -16,9 +16,9 @@ export default {
       method: requestData.method,
     });
 
-    let data = await res.json();
+    if (!res.ok) throw new ApiError(res.status, 'Error fetching user');
 
-    if (!res.ok) throw new ApiError(res.status, 'Error fetching user', data);
+    let data = await res.json();
 
     data = formatUserFrom(data);
 
@@ -44,16 +44,14 @@ export default {
       credentials: 'omit',
     });
 
-    let data = await res.json();
+    if (!res.ok) throw new ApiError(res.status, 'Error adding to wantlist');
 
-    if (!res.ok) throw new ApiError(res.status, 'Error adding to wantlist', data);
+    let data = await res.json();
 
     const dateAdded = new Date(data.date_added);
     const addedSince = (Date.now() - dateAdded.getTime()) / 1000;
 
-    if (addedSince > MAX_ADDED_SINCE_IN_SECONDS) {
-      throw new ApiError(422, 'Already in wantlist', data);
-    };
+    if (addedSince > MAX_ADDED_SINCE_IN_SECONDS) throw new ApiError(422, 'Already in wantlist');
 
     data = formatReleaseFrom(data);
 
