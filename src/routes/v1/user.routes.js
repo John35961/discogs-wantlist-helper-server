@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getUser, addToWantlist } from '../../controllers/user.controller.js';
+import { getUser, addToWantlist } from '../../controllers/v1/user.controller.js';
 
 const router = Router();
 

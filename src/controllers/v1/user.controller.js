@@ -1,4 +1,4 @@
-import discogsService from "../services/discogs.service.js";
+import discogsService from "../../services/discogs.service.js";
 
 export const getUser = async (req, res) => {
   const userName = req.params.userName;
