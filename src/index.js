@@ -2,7 +2,7 @@ import config from './config/index.config.js';
 import express from 'express';
 import cors from 'cors';
 import V1DiscogsRouter from './routes/v1/index.js';
-import { errorHandler } from './middlewares/errorHandler.js';
+import { errorHandler } from './middlewares/errorHandler.middleware.js';
 
 const app = express();
 
