@@ -1,6 +1,6 @@
 import searchService from "../../services/search.service.js";
 
-export const searchDatabase = async (req, res) => {
+export const searchDatabase = async (req, res, next) => {
   const accessToken = req.query.accessToken;
   const accessTokenSecret = req.query.accessTokenSecret;
   const query = req.query.q;
@@ -10,6 +10,6 @@ export const searchDatabase = async (req, res) => {
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   };
 };

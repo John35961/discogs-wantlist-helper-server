@@ -1,6 +1,7 @@
 import config from '../config/index.config.js';
 import oauth from './oauth.utils.js';
 import { formatReleasesFrom } from './discogs.utils.js';
+import { ApiError } from '../utils/apiError.js';
 
 export default {
   async searchDatabase(accessToken, accessTokenSecret, query) {
@@ -21,18 +22,14 @@ export default {
       headers: headers,
     });
 
-    if (!res.ok) {
-      throw new Error('Error searching for releases');
-    };
+    if (!res.ok) throw new ApiError(res.status, 'Error fetching releases', data);
 
     let data = await res.json();
 
-    if (data.results.length === 0) {
-      throw new Error('No release found');
-    };
+    if (data.results.length === 0) throw new ApiError(404, 'No release found', data);
 
     data = formatReleasesFrom(data);
 
     return data;
   },
-}
+};
