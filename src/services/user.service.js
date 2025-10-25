@@ -1,6 +1,7 @@
 import config from '../config/index.config.js';
 import oauth from './oauth.utils.js';
-import { formatUserFrom, formatReleaseFrom } from './discogs.utils.js';
+import { discogsError, formatUserFrom, formatReleaseFrom } from './discogs.utils.js';
+import { ApiError } from '../utils/apiError.js';
 
 const MAX_ADDED_SINCE_IN_SECONDS = 3;
 
@@ -15,11 +16,9 @@ export default {
       method: requestData.method,
     });
 
-    if (!res.ok) {
-      throw new Error('Error fetching user');
-    };
-
     let data = await res.json();
+
+    if (!res.ok) throw new ApiError(res.status, 'Error fetching user', data);
 
     data = formatUserFrom(data);
 
@@ -45,17 +44,15 @@ export default {
       credentials: 'omit',
     });
 
-    if (!res.ok) {
-      throw new Error('Error adding to wantlist');
-    };
-
     let data = await res.json();
+
+    if (!res.ok) throw new ApiError(res.status, 'Error adding to wantlist', data);
 
     const dateAdded = new Date(data.date_added);
     const addedSince = (Date.now() - dateAdded.getTime()) / 1000;
 
     if (addedSince > MAX_ADDED_SINCE_IN_SECONDS) {
-      throw new Error('Already in wantlist');
+      throw new ApiError(422, 'Already in wantlist', data);
     };
 
     data = formatReleaseFrom(data);
