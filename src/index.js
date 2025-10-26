@@ -8,9 +8,7 @@ import { errorHandler } from './middlewares/errorHandler.middleware.js';
 
 const app = express();
 
-app.use(cors({
-  origin: '*',
-}));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use('/discogs/api/v1', V1DiscogsRouter);
 app.use(notFound);
