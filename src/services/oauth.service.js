@@ -55,8 +55,6 @@ export default {
     const accessToken = params.get('oauth_token');
     const accessTokenSecret = params.get('oauth_token_secret');
 
-    if (!accessToken || !accessTokenSecret) throw new ApiError(res.status, 'Access tokens missing');
-
     return { accessToken, accessTokenSecret };
   },
 

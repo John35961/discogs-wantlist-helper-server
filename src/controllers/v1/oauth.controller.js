@@ -1,4 +1,5 @@
-import oauthService from "../../services/oauth.service.js";
+import oauthService from '../../services/oauth.service.js';
+import { ApiError } from '../../utils/apiError.js';
 
 export const getRequestToken = async (req, res, next) => {
   const chromeRuntimeId = req.query.chromeRuntimeId;
@@ -28,9 +29,7 @@ export const getIdentity = async (req, res, next) => {
   const accessToken = req.query.accessToken;
   const accessTokenSecret = req.query.accessTokenSecret;
 
-  if (!accessToken || !accessTokenSecret) {
-    return res.status(400).json({ error: 'Missing access tokens' });
-  };
+  if (!accessToken || !accessTokenSecret) return (next(new ApiError(400, 'Access tokens missing')));
 
   try {
     const data = await oauthService.getIdentity(accessToken, accessTokenSecret);
