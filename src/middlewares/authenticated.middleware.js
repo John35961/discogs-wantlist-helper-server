@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/index.config.js';
 
-export const auth = (req, res, next) => {
+export const authenticated = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(401).json({ error: 'Missing authorization header' });
 
