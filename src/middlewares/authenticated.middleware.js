@@ -12,6 +12,6 @@ export const authenticated = (req, res, next) => {
     jwt.verify(token, config.jwtGlobalSecret);
     next();
   } catch (error) {
-    return res.status(403).json({ erorr: 'Invalid or expired token' });
+    return res.status(401).json({ erorr: 'Invalid or expired token' });
   };
 };
