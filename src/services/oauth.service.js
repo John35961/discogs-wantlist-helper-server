@@ -78,7 +78,7 @@ export default {
       headers: headers
     });
 
-    if (!res.ok) throw new new ApiError(res.status, 'Error fetching identity');
+    if (!res.ok) throw new ApiError(res.status, 'Error fetching identity');
 
     const data = await res.json();
 
