@@ -8,6 +8,7 @@ const config = {
   consumerKey: process.env.CONSUMER_KEY,
   consumerSecret: process.env.CONSUMER_SECRET,
   jwtGlobalSecret: process.env.JWT_GLOBAL_SECRET,
+  refreshGlobalSecret: process.env.REFRESH_GLOBAL_SECRET,
 };
 
 export default config;
