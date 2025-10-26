@@ -1,4 +1,4 @@
-export const notFound = (req, res) => {
+export const notFound = (_req, res) => {
   return res.status(404).json({ error: 'Resource not found' },
   );
 }
