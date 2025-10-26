@@ -21,7 +21,6 @@ export const verify = async (req, res, next) => {
     };
     const jwtToken = jwt.sign(payload, config.jwtGlobalSecret, { expiresIn: JWT_EXPIRES_IN });
     const refreshToken = jwt.sign(payload, config.refreshGlobalSecret, { expiresIn: REFRESH_EXPIRES_IN });
-    console.log(refreshToken);
 
     res.json({
       accessToken: accessToken,
