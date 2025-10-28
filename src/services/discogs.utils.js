@@ -1,5 +1,7 @@
 import config from '../config/index.config.js';
 
+const FALLBACK_THUMB = `${config.appBaseUrl}/images/fallback_thumb.png`;
+
 export const formatUserFrom = (data) => {
   const user = data;
 
@@ -22,7 +24,7 @@ export const formatReleaseFrom = (data) => {
     release: {
       title: release.title,
       artists: parseArtists(release.artists),
-      thumb: release.thumb,
+      thumb: release.thumb || FALLBACK_THUMB,
       year: release.year,
       uri: releaseUriFrom(release.id),
     }
@@ -37,7 +39,7 @@ export const formatReleasesFrom = (data) => {
         id: result.id,
         title: result.title,
         styles: parseStyles(result.style),
-        thumb: result.thumb,
+        thumb: result.thumb || FALLBACK_THUMB,
         year: result.year,
         uri: releaseUriFrom(result.id),
       }

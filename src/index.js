@@ -10,6 +10,7 @@ const app = express();
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
+app.use(express.static('public'));
 app.use('/discogs/api/v1', V1DiscogsRouter);
 app.use(notFound);
 app.use(authenticated);
