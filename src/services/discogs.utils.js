@@ -18,15 +18,16 @@ export const formatUserFrom = (data) => {
 
 export const formatReleaseFrom = (data) => {
   const release = data.basic_information;
+  const artists = release.artists.map((artist) => { return artist.name });
 
   return {
     message: 'Added to wantlist',
     release: {
       title: release.title,
-      artists: parseArtists(release.artists),
-      thumb: release.thumb || FALLBACK_THUMB,
+      artists: commaSeparated(artists),
       year: release.year,
       uri: releaseUriFrom(release.id),
+      thumb: release.thumb || FALLBACK_THUMB,
     }
   };
 };
@@ -38,21 +39,17 @@ export const formatReleasesFrom = (data) => {
       release: {
         id: result.id,
         title: result.title,
-        styles: parseStyles(result.style),
-        thumb: result.thumb || FALLBACK_THUMB,
+        styles: commaSeparated(result.style),
         year: result.year,
         uri: releaseUriFrom(result.id),
+        thumb: result.thumb || FALLBACK_THUMB,
       }
     };
   });
 };
 
-const parseArtists = (artists) => {
-  return artists.map((artist) => { return artist.name }).join(', ');
-};
-
-const parseStyles = (styles) => {
-  return styles.join(', ');
+const commaSeparated = (items) => {
+  return items.join(', ');
 };
 
 const releaseUriFrom = (releaseId) => {
