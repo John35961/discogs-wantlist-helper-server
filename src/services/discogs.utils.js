@@ -19,12 +19,14 @@ export const formatUserFrom = (data) => {
 export const formatReleaseFrom = (data) => {
   const release = data.basic_information;
   const artists = release.artists.map((artist) => { return artist.name });
+  const formats = release.formats.map((format) => { return format.name });
 
   return {
     message: 'Added to wantlist',
     release: {
       title: release.title,
       artists: commaSeparated(artists),
+      formats: commaSeparated(formats),
       year: release.year,
       uri: releaseUriFrom(release.id),
       thumb: release.thumb || FALLBACK_THUMB,
@@ -39,7 +41,7 @@ export const formatReleasesFrom = (data) => {
       release: {
         id: result.id,
         title: result.title,
-        styles: commaSeparated(result.style),
+        formats: commaSeparated(result.format),
         year: result.year,
         uri: releaseUriFrom(result.id),
         thumb: result.thumb || FALLBACK_THUMB,
