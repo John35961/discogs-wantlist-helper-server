@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import config from '../../config/index.config.js';
-import { ApiError } from '../../utils/apiError.js';
-import oauthService from "../../services/oauth.service.js";
+import config from '../../../config/index.config.js';
+import { ApiError } from '../../../utils/apiError.js';
+import oauthService from "../services/oauth.service.js";
 
 const JWT_EXPIRES_IN = '15m';
 const REFRESH_EXPIRES_IN = '30d';

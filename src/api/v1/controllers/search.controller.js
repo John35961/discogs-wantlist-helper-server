@@ -1,4 +1,4 @@
-import searchService from "../../services/search.service.js";
+import searchService from "../services/search.service.js";
 
 export const searchDatabase = async (req, res, next) => {
   const accessToken = req.query.accessToken;

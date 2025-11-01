@@ -1,4 +1,4 @@
-import config from '../config/index.config.js';
+import config from '../../../config/index.config.js';
 
 const FALLBACK_THUMB = `${config.appBaseUrl}/images/fallback_thumb.png`;
 

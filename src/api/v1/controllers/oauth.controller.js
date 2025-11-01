@@ -1,5 +1,5 @@
-import oauthService from '../../services/oauth.service.js';
-import { ApiError } from '../../utils/apiError.js';
+import oauthService from '../services/oauth.service.js';
+import { ApiError } from '../../../utils/apiError.js';
 
 export const getRequestToken = async (req, res, next) => {
   const chromeRuntimeId = req.query.chromeRuntimeId;

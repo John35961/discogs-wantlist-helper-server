@@ -1,7 +1,7 @@
 import config from './config/index.config.js';
 import express from 'express';
 import cors from 'cors';
-import V1DiscogsRouter from './routes/v1/index.js';
+import V1DiscogsRouter from './api/v1/routes/index.js';
 import { authenticated } from './middlewares/authenticated.middleware.js';
 import { notFound } from './middlewares/notFound.middleware.js';
 import { errorHandler } from './middlewares/errorHandler.middleware.js';

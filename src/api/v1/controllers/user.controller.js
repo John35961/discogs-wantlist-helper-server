@@ -1,5 +1,5 @@
-import discogsUserService from "../../services/user.service.js";
-import { ApiError } from '../../utils/apiError.js';
+import discogsUserService from "../services/user.service.js";
+import { ApiError } from '../../../utils/apiError.js';
 
 export const getUser = async (req, res, next) => {
   const userName = req.params.userName;

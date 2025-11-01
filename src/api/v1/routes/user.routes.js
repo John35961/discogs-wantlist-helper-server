@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getUser, addToWantlist } from '../../controllers/v1/user.controller.js';
-import { authenticated } from '../../middlewares/authenticated.middleware.js';
+import { getUser, addToWantlist } from '../controllers/user.controller.js';
+import { authenticated } from '../../../middlewares/authenticated.middleware.js';
 
 const router = Router();
 

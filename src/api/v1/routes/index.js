@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import authRoutes from '../auth.routes.js';
+import authRoutes from './auth.routes.js';
 import oauthRoutes from './oauth.routes.js';
 import userRoutes from './user.routes.js';
 import searchRoutes from './search.routes.js';
