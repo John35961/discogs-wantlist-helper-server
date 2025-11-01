@@ -1,4 +1,4 @@
-import oauthService from '../services/oauth.service.js';
+import oauthService from '../../../api/common/services/oauth.service.js';
 import { ApiError } from '../../../utils/apiError.js';
 
 export const getRequestToken = async (req, res, next) => {
