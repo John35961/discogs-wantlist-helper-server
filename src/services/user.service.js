@@ -1,6 +1,6 @@
 import config from '../config/index.config.js';
 import oauth from './oauth.utils.js';
-import { formatUserFrom, formatReleaseFrom } from './discogs.utils.js';
+import { mapDiscogsUser, mapDiscogsReleaseDetails } from './discogs.utils.js';
 import { ApiError } from '../utils/apiError.js';
 
 const MAX_ADDED_SINCE_IN_SECONDS = 3;
@@ -20,7 +20,7 @@ export default {
 
     let data = await res.json();
 
-    data = formatUserFrom(data);
+    data = mapDiscogsUser(data);
 
     return data;
   },
@@ -53,7 +53,7 @@ export default {
 
     if (addedSince > MAX_ADDED_SINCE_IN_SECONDS) throw new ApiError(422, 'Already in wantlist');
 
-    data = formatReleaseFrom(data);
+    data = mapDiscogsReleaseDetails(data.basic_information);
 
     return data;
   },

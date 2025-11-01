@@ -1,6 +1,6 @@
 import config from '../config/index.config.js';
 import oauth from './oauth.utils.js';
-import { formatReleasesFrom } from './discogs.utils.js';
+import { mapsDiscogsSearchResults } from './discogs.utils.js';
 import { ApiError } from '../utils/apiError.js';
 
 export default {
@@ -28,7 +28,7 @@ export default {
 
     if (data.results.length === 0) throw new ApiError(404, 'No release found');
 
-    data = formatReleasesFrom(data);
+    data = mapsDiscogsSearchResults(data.results);
 
     return data;
   },

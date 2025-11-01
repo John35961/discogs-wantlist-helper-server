@@ -2,9 +2,7 @@ import config from '../config/index.config.js';
 
 const FALLBACK_THUMB = `${config.appBaseUrl}/images/fallback_thumb.png`;
 
-export const formatUserFrom = (data) => {
-  const user = data;
-
+export const mapDiscogsUser = (user) => {
   return {
     user: {
       name: user.name || user.username,
@@ -16,8 +14,7 @@ export const formatUserFrom = (data) => {
   };
 };
 
-export const formatReleaseFrom = (data) => {
-  const release = data.basic_information;
+export const mapDiscogsReleaseDetails = (release) => {
   const artists = release.artists.map((artist) => { return artist.name });
   const formats = release.formats.map((format) => { return format.name });
 
@@ -34,8 +31,8 @@ export const formatReleaseFrom = (data) => {
   };
 };
 
-export const formatReleasesFrom = (data) => {
-  return data.results.map((result) => {
+export const mapsDiscogsSearchResults = (results) => {
+  return results.map((result) => {
     return {
       message: 'Want',
       release: {
