@@ -2,10 +2,19 @@ import searchService from '../../common/services/search.service.js';
 import { mapsDiscogsSearchResults } from '../utils/discogs.utils.js';
 
 export default {
-  async searchDatabase(accessToken, accessTokenSecret, query) {
-    let data = await searchService.searchDatabase(accessToken, accessTokenSecret, query);
+  async searchDatabase(accessToken, accessTokenSecret, query, page) {
+    let data = await searchService.searchDatabase(accessToken, accessTokenSecret, query, page);
+    const pagination = {
+      page: data.pagination.page,
+      pages: data.pagination.pages,
+      per_page: data.pagination.per_page,
+      items: data.pagination.items,
+    };
 
-    data = mapsDiscogsSearchResults(data.results);
+    data = {
+      pagination: pagination,
+      results: mapsDiscogsSearchResults(data.results),
+    };
 
     return data;
   },

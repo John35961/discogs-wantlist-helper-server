@@ -3,9 +3,9 @@ import oauth from '../utils/oauth.utils.js';
 import { ApiError } from '../../../utils/apiError.js';
 
 export default {
-  async searchDatabase(accessToken, accessTokenSecret, query) {
+  async searchDatabase(accessToken, accessTokenSecret, query, page) {
     const requestData = {
-      url: `${config.discogsApiBaseUrl}/database/search?q=${query}&per_page=5&type=release`,
+      url: `${config.discogsApiBaseUrl}/database/search?q=${query}&page=${page}&per_page=5&type=release`,
       method: 'GET'
     };
 

@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import config from '../../../config/index.config.js';
 
 const FALLBACK_THUMB = `${config.appBaseUrl}/images/fallback_thumb.png`;
@@ -37,6 +38,7 @@ export const mapsDiscogsSearchResults = (results) => {
       message: 'Want',
       release: {
         id: result.id,
+        uuid: randomUUID(),
         title: result.title,
         formats: commaSeparated(result.format),
         year: result.year,
