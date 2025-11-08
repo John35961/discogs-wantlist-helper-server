@@ -52,4 +52,26 @@ export default {
 
     return data.basic_information;
   },
+
+  async removeFromWantlist(accessToken, accessTokenSecret, userName, releaseId) {
+    const requestData = {
+      url: `${config.discogsApiBaseUrl}/users/${userName}/wants/${releaseId}`,
+      method: 'DELETE'
+    };
+
+
+    const tokens = {
+      key: accessToken,
+      secret: accessTokenSecret
+    };
+
+    const headers = oauth.instance.toHeader(oauth.instance.authorize(requestData, tokens));
+
+    const res = await fetch(requestData.url, {
+      method: requestData.method,
+      headers: headers,
+    });
+
+    if (!res.ok) throw new ApiError(res.status, 'Error removing from wantlist');
+  },
 };
