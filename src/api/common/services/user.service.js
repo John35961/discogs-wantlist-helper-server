@@ -59,7 +59,6 @@ export default {
       method: 'DELETE'
     };
 
-
     const tokens = {
       key: accessToken,
       secret: accessTokenSecret
