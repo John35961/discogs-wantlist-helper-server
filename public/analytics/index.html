@@ -234,6 +234,23 @@
       max-height: 240px;
       overflow-y: auto;
     }
+
+    .card-status {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-status-outer {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .chart-status-wrap {
+      position: relative;
+      height: 180px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -282,10 +299,12 @@
         <div id="endpoint-table" class="table-scroll"></div>
       </div>
 
-      <div class="card">
+      <div class="card card-status">
         <h2>Status code breakdown</h2>
-        <div class="chart-wrap" style="height:180px;">
-          <canvas id="chart-status"></canvas>
+        <div class="chart-status-outer">
+          <div class="chart-wrap chart-status-wrap">
+            <canvas id="chart-status"></canvas>
+          </div>
         </div>
       </div>
     </div>
