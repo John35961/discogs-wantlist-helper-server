@@ -2,6 +2,8 @@ import config from './config/index.config.js';
 import express from 'express';
 import cors from 'cors';
 import V1DiscogsRouter from './api/v1/routes/index.js';
+import analyticsRouter from './analytics/analytics.routes.js';
+import { trackRequests } from './analytics/track.middleware.js';
 import { authenticated } from './middlewares/authenticated.middleware.js';
 import { notFound } from './middlewares/notFound.middleware.js';
 import { errorHandler } from './middlewares/errorHandler.middleware.js';
@@ -10,6 +12,8 @@ const app = express();
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
+app.use(trackRequests);
+app.use('/analytics', analyticsRouter);
 app.use(express.static('public'));
 app.use('/discogs/api/v1', V1DiscogsRouter);
 app.use(notFound);

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discogs API Analytics</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d3a;
+      --accent: #7c6af7;
+      --accent-dim: #3d3580;
+      --green: #3dd68c;
+      --red: #f25f5c;
+      --yellow: #f9c74f;
+      --text: #e2e4ef;
+      --muted: #6b7094;
+      --radius: 12px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    .range-selector {
+      display: flex;
+      gap: 6px;
+    }
+
+    .range-selector button {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+
+    .range-selector button:hover { border-color: var(--accent); color: var(--text); }
+    .range-selector button.active { background: var(--accent-dim); border-color: var(--accent); color: var(--text); }
+
+    main {
+      padding: 28px 32px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-card .value.green { color: var(--green); }
+    .stat-card .value.red { color: var(--red); }
+    .stat-card .value.accent { color: var(--accent); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+
+    .card h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 18px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 220px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      text-align: left;
+      padding: 0 0 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody td {
+      padding: 10px 0;
+      vertical-align: middle;
+    }
+
+    .method-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .method-GET { background: #1a3a2a; color: var(--green); }
+    .method-PUT { background: #2a2a1a; color: var(--yellow); }
+    .method-DELETE { background: #2a1a1a; color: var(--red); }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+    }
+
+    .bar-row .query-label {
+      flex: 0 0 160px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    .bar-count {
+      flex: 0 0 32px;
+      text-align: right;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .empty-state {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .full-width { grid-column: 1 / -1; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Discogs API <span>Analytics</span></h1>
+    <div class="range-selector">
+      <button data-days="1">24h</button>
+      <button data-days="7" class="active">7d</button>
+      <button data-days="30">30d</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="label">Total Requests</div>
+        <div class="value accent" id="stat-total">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Endpoints Hit</div>
+        <div class="value" id="stat-endpoints">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Error Rate</div>
+        <div class="value" id="stat-errors">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Avg Latency</div>
+        <div class="value" id="stat-latency">—</div>
+      </div>
+    </div>
+
+    <div class="card full-width">
+      <h2>Requests over time</h2>
+      <div class="chart-wrap">
+        <canvas id="chart-timeline"></canvas>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h2>Requests by endpoint</h2>
+        <div id="endpoint-table"></div>
+      </div>
+
+      <div class="card">
+        <h2>Status code breakdown</h2>
+        <div class="chart-wrap" style="height:180px;">
+          <canvas id="chart-status"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card full-width">
+      <h2>Top search queries</h2>
+      <div id="top-searches"></div>
+    </div>
+  </main>
+
+  <script>
+    let timelineChart = null;
+    let statusChart = null;
+
+    function fmt(n) {
+      return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n);
+    }
+
+    function renderStats(data) {
+      const { totalRequests, byEndpoint, topSearches, requestsOverTime, statusCodes } = data;
+
+      document.getElementById('stat-total').textContent = fmt(totalRequests);
+      document.getElementById('stat-endpoints').textContent = byEndpoint.length;
+
+      const totalErrors = byEndpoint.reduce((s, e) => s + e.errors, 0);
+      const errPct = totalRequests > 0 ? ((totalErrors / totalRequests) * 100).toFixed(1) : '0.0';
+      const errEl = document.getElementById('stat-errors');
+      errEl.textContent = errPct + '%';
+      errEl.className = 'value ' + (parseFloat(errPct) > 5 ? 'red' : 'green');
+
+      const totalMs = byEndpoint.reduce((s, e) => s + e.avg_ms * e.count, 0);
+      const avgMs = totalRequests > 0 ? Math.round(totalMs / totalRequests) : 0;
+      document.getElementById('stat-latency').textContent = avgMs + 'ms';
+
+      renderTimeline(requestsOverTime);
+      renderEndpointTable(byEndpoint);
+      renderStatusChart(statusCodes);
+      renderTopSearches(topSearches);
+    }
+
+    function renderTimeline(data) {
+      const labels = data.map(r => {
+        const d = new Date(r.hour);
+        return d.toLocaleDateString('en', { month: 'short', day: 'numeric', hour: '2-digit' });
+      });
+      const values = data.map(r => r.count);
+
+      if (timelineChart) timelineChart.destroy();
+
+      timelineChart = new Chart(document.getElementById('chart-timeline'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: 'rgba(124, 106, 247, 0.5)',
+            borderColor: 'rgba(124, 106, 247, 1)',
+            borderWidth: 1,
+            borderRadius: 4,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              ticks: { color: '#6b7094', maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
+              grid: { color: '#2a2d3a' },
+            },
+            y: {
+              ticks: { color: '#6b7094' },
+              grid: { color: '#2a2d3a' },
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+
+    function renderEndpointTable(endpoints) {
+      const container = document.getElementById('endpoint-table');
+      if (!endpoints.length) {
+        container.innerHTML = '<div class="empty-state">No data yet</div>';
+        return;
+      }
+
+      const rows = endpoints.map(e => `
+        <tr>
+          <td><span class="method-badge method-${e.method}">${e.method}</span></td>
+          <td style="padding-left:10px; color: var(--text); font-family: monospace; font-size: 12px;">${e.endpoint}</td>
+          <td style="text-align:right; color: var(--accent); font-weight:600;">${fmt(e.count)}</td>
+          <td style="text-align:right; color: var(--muted);">${e.avg_ms}ms</td>
+          <td style="text-align:right; color: ${e.errors > 0 ? 'var(--red)' : 'var(--muted)'};">${e.errors}</td>
+        </tr>
+      `).join('');
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th style="padding-left:10px;">Endpoint</th>
+              <th style="text-align:right;">Calls</th>
+              <th style="text-align:right;">Avg ms</th>
+              <th style="text-align:right;">Errors</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function renderStatusChart(statusCodes) {
+      const STATUS_COLORS = {
+        2: '#3dd68c',
+        3: '#f9c74f',
+        4: '#f25f5c',
+        5: '#e05252',
+      };
+
+      const labels = statusCodes.map(s => String(s.status_code));
+      const values = statusCodes.map(s => s.count);
+      const colors = statusCodes.map(s => STATUS_COLORS[Math.floor(s.status_code / 100)] ?? '#6b7094');
+
+      if (statusChart) statusChart.destroy();
+
+      statusChart = new Chart(document.getElementById('chart-status'), {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: { color: '#e2e4ef', boxWidth: 12, padding: 14, font: { size: 12 } },
+            },
+          },
+          cutout: '65%',
+        },
+      });
+    }
+
+    function renderTopSearches(searches) {
+      const container = document.getElementById('top-searches');
+      if (!searches.length) {
+        container.innerHTML = '<div class="empty-state">No searches yet</div>';
+        return;
+      }
+
+      const max = searches[0].count;
+      container.innerHTML = searches.map(s => `
+        <div class="bar-row">
+          <div class="query-label" title="${s.query}">${s.query}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(s.count / max) * 100}%"></div>
+          </div>
+          <div class="bar-count">${s.count}</div>
+        </div>
+      `).join('');
+    }
+
+    async function load(days) {
+      const res = await fetch(`/analytics/data?days=${days}`);
+      const data = await res.json();
+      renderStats(data);
+    }
+
+    document.querySelector('.range-selector').addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      document.querySelectorAll('.range-selector button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      load(btn.dataset.days);
+    });
+
+    load(7);
+  </script>
+</body>
+</html>
