@@ -14,21 +14,20 @@ function normalizeEndpoint(req) {
 
 export function trackRequests(req, res, next) {
   const start = Date.now();
+  // Snapshot before nested routers mutate req.path
+  const path = req.path;
+  const query = req.query;
+  const endpoint = normalizeEndpoint(req);
 
   res.on('finish', () => {
-    const durationMs = Date.now() - start;
-    const searchQuery = req.path.includes('/database/search')
-      ? (req.query.q ?? null)
-      : null;
-
     logRequest({
       timestamp: start,
       method: req.method,
-      path: req.path,
-      endpoint: normalizeEndpoint(req),
+      path,
+      endpoint,
       statusCode: res.statusCode,
-      durationMs,
-      searchQuery,
+      durationMs: Date.now() - start,
+      searchQuery: path.includes('/database/search') ? (query.q ?? null) : null,
     });
   });
 
