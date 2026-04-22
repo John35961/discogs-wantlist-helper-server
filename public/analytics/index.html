@@ -158,6 +158,9 @@
       text-align: left;
       padding: 0 0 10px;
       border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--surface);
     }
 
     tbody tr { border-bottom: 1px solid var(--border); }
@@ -226,6 +229,11 @@
     }
 
     .full-width { grid-column: 1 / -1; }
+
+    .table-scroll {
+      max-height: 240px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
@@ -271,7 +279,7 @@
     <div class="grid-2">
       <div class="card">
         <h2>Requests by endpoint</h2>
-        <div id="endpoint-table"></div>
+        <div id="endpoint-table" class="table-scroll"></div>
       </div>
 
       <div class="card">
