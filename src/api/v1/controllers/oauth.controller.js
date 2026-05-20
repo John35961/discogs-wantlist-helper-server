@@ -26,8 +26,7 @@ export const getAccessToken = async (req, res, next) => {
 };
 
 export const getIdentity = async (req, res, next) => {
-  const accessToken = req.query.accessToken;
-  const accessTokenSecret = req.query.accessTokenSecret;
+  const { accessToken, accessTokenSecret } = req.body;
 
   if (!accessToken || !accessTokenSecret) return (next(new ApiError(400, 'Access tokens missing')));
 

@@ -1,8 +1,7 @@
 import searchService from "../services/search.service.js";
 
 export const searchDatabase = async (req, res, next) => {
-  const accessToken = req.query.accessToken;
-  const accessTokenSecret = req.query.accessTokenSecret;
+  const { accessToken, accessTokenSecret } = req.body;
   const query = req.query.q;
   const page = req.query.page;
 
