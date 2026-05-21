@@ -26,7 +26,12 @@ export const getAccessToken = async (req, res, next) => {
 };
 
 export const getIdentity = async (req, res, next) => {
-  const { accessToken, accessTokenSecret } = req.body;
+  const accessToken = req.body.accessToken ?? req.query.accessToken;
+  const accessTokenSecret = req.body.accessTokenSecret ?? req.query.accessTokenSecret;
+
+  if (req.query.accessToken || req.query.accessTokenSecret) {
+    console.warn('[DEPRECATED] GET /oauth/identity: tokens in query params — migrate to POST with tokens in body');
+  }
 
   if (!accessToken || !accessTokenSecret) return (next(new ApiError(400, 'Access tokens missing')));
 
