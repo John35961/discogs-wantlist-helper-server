@@ -4,6 +4,7 @@ import { authenticated } from '../../../middlewares/authenticated.middleware.js'
 
 const router = Router();
 
-router.get('/search', authenticated, searchDatabase);
+router.get('/search', authenticated, searchDatabase);  // deprecated: tokens in query params
+router.post('/search', authenticated, searchDatabase);
 
 export default router;
