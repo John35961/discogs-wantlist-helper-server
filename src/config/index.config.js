@@ -10,6 +10,8 @@ const config = {
   consumerSecret: process.env.CONSUMER_SECRET,
   jwtGlobalSecret: process.env.JWT_GLOBAL_SECRET,
   refreshGlobalSecret: process.env.REFRESH_GLOBAL_SECRET,
+  analyticsUser: process.env.ANALYTICS_USER,
+  analyticsPassword: process.env.ANALYTICS_PASSWORD,
 };
 
 export default config;
